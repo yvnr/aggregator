@@ -24,7 +24,7 @@ public class AggregationController {
 	@Autowired
 	AggregationService aggregationService;
 	
-	@GetMapping("/data")
+	@GetMapping("/analytics")
 	public ResponseEntity getAggregatedData(@RequestParam(name = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
 			@RequestParam(name = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
 			@RequestHeader("X-user_id") long userId,
