@@ -6,9 +6,9 @@ public class JobApplication {
 
     private Long id;
 	 
-	private long userId;
+	private String userId;
 	
-	private long univId;
+	private String univId;
 	
 	private String company;
 	
@@ -28,6 +28,27 @@ public class JobApplication {
 	
 	private Date responseTime;
 
+	public JobApplication() {
+	}
+	
+	public JobApplication(Long id, String userId, String univId, String company, String position, String status,
+			String jobId, String location, Date appliedTime, Date assessmentTime, Date interviewTime,
+			Date responseTime) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.univId = univId;
+		this.company = company;
+		this.position = position;
+		this.status = status;
+		this.jobId = jobId;
+		this.location = location;
+		this.appliedTime = appliedTime;
+		this.assessmentTime = assessmentTime;
+		this.interviewTime = interviewTime;
+		this.responseTime = responseTime;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -36,19 +57,19 @@ public class JobApplication {
 		this.id = id;
 	}
 
-	public long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public long getUnivId() {
+	public String getUnivId() {
 		return univId;
 	}
 
-	public void setUnivId(long univId) {
+	public void setUnivId(String univId) {
 		this.univId = univId;
 	}
 

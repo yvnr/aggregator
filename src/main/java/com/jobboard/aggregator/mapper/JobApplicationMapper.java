@@ -29,7 +29,7 @@ public interface JobApplicationMapper {
 		@Result(property = "interviewTime", column = "interview_time"),
 		@Result(property = "responseTime", column = "response_time")
 	})
-	public ArrayList<JobApplication> fetchAllApplicationByUnivInDateRange(long univId, Date startTime, Date endTime);
+	public ArrayList<JobApplication> fetchAllApplicationByUnivInDateRange(String univId, Date startTime, Date endTime);
 	
 	
 	

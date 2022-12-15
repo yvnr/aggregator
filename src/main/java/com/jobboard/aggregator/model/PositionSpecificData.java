@@ -11,6 +11,25 @@ public class PositionSpecificData {
 	private long selectedCount;
 	private long rejectCount;
 	
+	public PositionSpecificData() {
+	}
+	
+	
+	
+	public PositionSpecificData(String company, String position, long appliedCount, long assessmentCount,
+			long interviewCount, long selectedCount, long rejectCount) {
+		super();
+		this.company = company;
+		this.position = position;
+		this.appliedCount = appliedCount;
+		this.assessmentCount = assessmentCount;
+		this.interviewCount = interviewCount;
+		this.selectedCount = selectedCount;
+		this.rejectCount = rejectCount;
+	}
+
+
+
 	public void addToAppliedCount() {
 		this.appliedCount++;
 	}

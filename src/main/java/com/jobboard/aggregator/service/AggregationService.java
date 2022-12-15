@@ -26,7 +26,7 @@ public class AggregationService {
 	private final Logger logger = LogManager.getLogger(AggregationService.class);
 
 	
-	public CumulativeData computeCumulativeData(long univId, Date startTime, Date endTime) {
+	public CumulativeData computeCumulativeData(String univId, Date startTime, Date endTime) {
 		
 		CumulativeData cumulativeData = new CumulativeData();	
 		HashMap<String, PositionSpecificData> positionCacheMap = new HashMap<String, PositionSpecificData>();

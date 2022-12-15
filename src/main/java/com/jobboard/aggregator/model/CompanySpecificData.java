@@ -9,6 +9,21 @@ public class CompanySpecificData {
 	private long selectedCount;
 	private long rejectCount;
 	
+	public CompanySpecificData() {
+	}
+	
+	
+	public CompanySpecificData(String company, long appliedCount, long assessmentCount, long interviewCount,
+			long selectedCount, long rejectCount) {
+		super();
+		this.company = company;
+		this.appliedCount = appliedCount;
+		this.assessmentCount = assessmentCount;
+		this.interviewCount = interviewCount;
+		this.selectedCount = selectedCount;
+		this.rejectCount = rejectCount;
+	}
+
 	public void addToAppliedCount() {
 		this.appliedCount++;
 	}
