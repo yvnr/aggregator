@@ -38,7 +38,6 @@ public class AggregationService {
 		logger.debug("Successfully fetched applications from university id: " + univId + " from: " + startTime.toInstant() + " to: " + endTime.toInstant());
 
 		for(JobApplication currentApplication : jobApplications) {
-			System.out.println(currentApplication.toString());
 			String uniqueIdentifier = currentApplication.getCompany() + "," + currentApplication.getPosition();
 			if(!positionCacheMap.containsKey(uniqueIdentifier)) {
 				PositionSpecificData newPosition =  new PositionSpecificData();
@@ -61,9 +60,6 @@ public class AggregationService {
 			Date assessmentDate = currentApplication.getAssessmentTime();
 			Date interviewDate = currentApplication.getInterviewTime();
 			
-			System.out.println(appliedDate);
-			System.out.println(assessmentDate);
-			System.out.println(interviewDate);
 			if(appliedDate != null && startTime.compareTo(appliedDate) <= 0 && endTime.compareTo(appliedDate) >= 0)
 			{
 				existingDataAboutPosition.addToAppliedCount();

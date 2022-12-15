@@ -34,8 +34,8 @@ public class AggregationController {
 	@GetMapping("/analytics")
 	public ResponseEntity getAggregatedData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
 			@RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) Date endDate,
-			@RequestHeader("X-user_id") long userId,
-			@RequestHeader("X-univ_id") long univId) {
+			@RequestHeader("x-uid") long userId,
+			@RequestHeader("x-univ-id") long univId) {
 		
 		try {
 

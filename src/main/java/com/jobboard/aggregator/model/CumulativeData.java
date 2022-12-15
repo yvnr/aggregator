@@ -2,16 +2,7 @@ package com.jobboard.aggregator.model;
 
 import java.util.ArrayList;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
 public class CumulativeData {
 
 	private ArrayList<CompanySpecificData> companySpecificData;
@@ -22,4 +13,22 @@ public class CumulativeData {
 		companySpecificData = new ArrayList<CompanySpecificData>();
 	}
 
+	public ArrayList<CompanySpecificData> getCompanySpecificData() {
+		return companySpecificData;
+	}
+
+	public void setCompanySpecificData(ArrayList<CompanySpecificData> companySpecificData) {
+		this.companySpecificData = companySpecificData;
+	}
+
+	public ArrayList<PositionSpecificData> getPositionSpecificData() {
+		return positionSpecificData;
+	}
+
+	public void setPositionSpecificData(ArrayList<PositionSpecificData> positionSpecificData) {
+		this.positionSpecificData = positionSpecificData;
+	}
+	
+	
+	
 }
