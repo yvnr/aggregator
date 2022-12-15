@@ -20,6 +20,15 @@ public interface JobApplicationMapper {
 
 	
 	@Select("select * from job_applications_table where univ_id = #{univId} and applied_time >= #{startTime} and applied_time <= #{endTime}")
+	@Results({
+		@Result(property = "userId", column = "user_id"), 
+		@Result(property = "univId", column = "univ_id"), 
+		@Result(property = "jobId", column = "job_id"),
+		@Result(property = "appliedTime", column = "applied_time"),
+		@Result(property = "assessmentTime", column = "assessment_time"),
+		@Result(property = "interviewTime", column = "interview_time"),
+		@Result(property = "responseTime", column = "response_time")
+	})
 	public ArrayList<JobApplication> fetchAllApplicationByUnivInDateRange(long univId, Date startTime, Date endTime);
 	
 	
