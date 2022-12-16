@@ -2,6 +2,10 @@ package com.jobboard.aggregator.model;
 
 import java.util.Date;
 
+/**
+ * A Java class containing all the information of a job application
+ *
+ */
 public class JobApplication {
 
     private Long id;

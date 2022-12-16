@@ -2,7 +2,10 @@ package com.jobboard.aggregator.model;
 
 import java.util.ArrayList;
 
-
+/**
+ * A POJO class having a list of the aggregated data per company
+ *
+ */
 public class CompanyCumulativeData {
 
 	private ArrayList<CompanySpecificData> companySpecificData;

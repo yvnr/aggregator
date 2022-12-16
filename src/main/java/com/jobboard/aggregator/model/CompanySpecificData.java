@@ -1,13 +1,17 @@
 package com.jobboard.aggregator.model;
 
+/**
+ * This class contains all the aggregated information for job applications made to a compnay
+ *
+ */
 public class CompanySpecificData {
 	
-	private String company;
-	private long appliedCount;
-	private long assessmentCount;
-	private long interviewCount;
-	private long selectedCount;
-	private long rejectCount;
+	private String company;	// name of the company
+	private long appliedCount;	// number of job applications in APPLIED status
+	private long assessmentCount; // number of job applications in ASSESSMENT status
+	private long interviewCount; // number of job applications in INTERVIEW status
+	private long selectedCount; // number of job applications in SELECTED status
+	private long rejectCount; // number of job applications in REJECT status
 	
 	public CompanySpecificData() {
 	}

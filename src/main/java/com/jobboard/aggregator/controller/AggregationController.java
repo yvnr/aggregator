@@ -23,6 +23,10 @@ import com.jobboard.aggregator.model.PositionCumulativeData;
 import com.jobboard.aggregator.service.AggregationService;
 
 
+/**
+ * Exposes 2 GET APIs towards the user interface to fetch aggregated data of the job applications.
+ *
+ */
 @RestController
 public class AggregationController {
 
@@ -32,6 +36,14 @@ public class AggregationController {
 	
 	private final Logger logger = LogManager.getLogger(AggregationController.class);
 	
+	/**
+	 * A GET API: /analytics/company exposed towards the user interface to fetch all teh aggregated data for each compnay in the given date range
+	 * @param startDate The beginning of the date range
+	 * @param endDate The end of the date range
+	 * @param userId The unique id of the user
+	 * @param univId The unique id of the university
+	 * @return returns the aggregated analytics for each company along with an appropriate HTTP Status Code.
+	 */
 	@GetMapping("/analytics/company")
 	public ResponseEntity getCompanyAggregatedData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
 			@RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) Date endDate,
@@ -42,7 +54,8 @@ public class AggregationController {
 
 			logger.info("Recieved request to fetch cumulative data from: " + startDate.toInstant() + " to: " + endDate.toInstant());
 			CompanyCumulativeData cumulativeData = aggregationService.computeCompanyCumulativeData(univId, startDate, endDate);
-			logger.debug("Responding to request to fetch cumulative data from: " + startDate.toInstant() + " to: " + endDate.toInstant() + " with: " + cumulativeData.toString() );
+			logger.info("Successfully responded with cumulative data from: " + startDate.toInstant() + " to: " + endDate.toInstant());
+
 			return new ResponseEntity(cumulativeData, HttpStatus.OK);
 			
 		}catch (Exception ex) {
@@ -55,6 +68,15 @@ public class AggregationController {
 		}
 	}
 	
+	/**
+	 * A GET API: /analytics/position exposed towards the user interface to fetch aggregated data for each position in a particular company
+	 * @param startDate The beginning of the date range
+	 * @param endDate The end of the date range
+	 * @param company The name of the company for which the analytics are requests
+	 * @param userId The unique id of the user
+	 * @param univId The unique id of the university
+	 * @return returns the analytics for the requested company along with appropriate HTTP Status Code
+	 */
 	@GetMapping("/analytics/position")
 	public ResponseEntity getPositionAggregateData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
 			@RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) Date endDate,
@@ -64,8 +86,11 @@ public class AggregationController {
 		
 		try {
 			
+			logger.info("Recieved request to fetch cumulative data for company: {} from: " + startDate.toInstant() + " to: " + endDate.toInstant(), company);
+
 			PositionCumulativeData positionCumulativeData = aggregationService.computePositionCumulativeDataByCompany(univId, company, startDate, endDate);
-			logger.info("returning: " + positionCumulativeData);	
+			
+			logger.info("Successfully fetched cumulative data for company: {} from: " + startDate.toInstant() + " to: " + endDate.toInstant(), company);
 			return new ResponseEntity(positionCumulativeData, HttpStatus.OK);
 			
 		}catch (Exception ex) {

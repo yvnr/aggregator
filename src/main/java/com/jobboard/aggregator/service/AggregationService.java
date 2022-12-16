@@ -18,6 +18,10 @@ import com.jobboard.aggregator.model.JobApplication;
 import com.jobboard.aggregator.model.PositionCumulativeData;
 import com.jobboard.aggregator.model.PositionSpecificData;
 
+/**
+ * The service layer class contains the business logic to compute the aggregated date as required. The instance methods of this class are called by controller layer methods.
+ *
+ */
 @Service
 public class AggregationService {
 
@@ -26,10 +30,16 @@ public class AggregationService {
 	
 	private final Logger logger = LogManager.getLogger(AggregationService.class);
 
-	
+	/**
+	 * The method computes the aggregated data of job applications made by all the users from a specific university
+	 * @param univId The unique id of the university/school
+	 * @param startTime The beginning of the date range
+	 * @param endTime The end of the date range
+	 * @return returns the aggregated data
+	 */
 	public CompanyCumulativeData computeCompanyCumulativeData(String univId, Date startTime, Date endTime) {
 		
-		CompanyCumulativeData cumulativeData = new CompanyCumulativeData();	
+		CompanyCumulativeData cumulativeData = new CompanyCumulativeData();
 		HashMap<String, CompanySpecificData>  companyCacheMap = new HashMap<String, CompanySpecificData>();
 		logger.debug("Attempting to fetch all applications from university id: " + univId + " from: " + startTime.toInstant() + " to: " + endTime.toInstant());
 		
@@ -75,18 +85,28 @@ public class AggregationService {
 			}
 			
 		}
-		logger.info("The cumulative data prepared successfully");
+		logger.debug("The cumulative data for university: {} prepared successfully", univId);
 		cumulativeData.setCompanySpecificData(new ArrayList<CompanySpecificData>(companyCacheMap.values()));
 		
 		return cumulativeData;
 	}
 	
+	/**
+	 * The method computes the aggregated data of job applications made by all the users from a specific university to a specific company in the given date range
+	 * @param univId The unique id of the university/school
+	 * @param company The name of the company
+	 * @param startDate The beginning of the date range
+	 * @param endDate The end of the date range
+	 * @return returns the aggregated data
+	 */
 	public PositionCumulativeData computePositionCumulativeDataByCompany(String univId, String company, Date startDate, Date endDate) {
 		
 		HashMap<String, PositionSpecificData> positionCacheMap = new HashMap<String, PositionSpecificData>();
 		PositionCumulativeData positionCumulativeData = new PositionCumulativeData();
 		
 		ArrayList<JobApplication> jobApplications = jobApplicationMapper.fetchAllApplicationByUnivByCompanyInDateRange(univId, company, startDate, endDate);
+		logger.debug("Successfully fetched {} applications to company: {} from university id: " + univId + " from: " + startDate.toInstant() + " to: " + endDate.toInstant(), jobApplications.size(), company);
+
 		for(JobApplication currentApplication : jobApplications) {
 			String uniqueIdentifier = currentApplication.getCompany() + "," + currentApplication.getPosition();
 			if(!positionCacheMap.containsKey(uniqueIdentifier)) {
@@ -126,6 +146,8 @@ public class AggregationService {
 			}
 			
 		}
+		logger.debug("The cumulative data for university: {} prepared successfully", univId);
+
 		positionCumulativeData.setPositionSpecificData(new ArrayList<PositionSpecificData>(positionCacheMap.values()));
 
 		return positionCumulativeData;
