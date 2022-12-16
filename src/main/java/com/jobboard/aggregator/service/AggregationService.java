@@ -13,8 +13,9 @@ import com.jobboard.aggregator.controller.AggregationController;
 import com.jobboard.aggregator.enums.JobStatusEnum;
 import com.jobboard.aggregator.mapper.JobApplicationMapper;
 import com.jobboard.aggregator.model.CompanySpecificData;
-import com.jobboard.aggregator.model.CumulativeData;
+import com.jobboard.aggregator.model.CompanyCumulativeData;
 import com.jobboard.aggregator.model.JobApplication;
+import com.jobboard.aggregator.model.PositionCumulativeData;
 import com.jobboard.aggregator.model.PositionSpecificData;
 
 @Service
@@ -26,10 +27,9 @@ public class AggregationService {
 	private final Logger logger = LogManager.getLogger(AggregationService.class);
 
 	
-	public CumulativeData computeCumulativeData(String univId, Date startTime, Date endTime) {
+	public CompanyCumulativeData computeCompanyCumulativeData(String univId, Date startTime, Date endTime) {
 		
-		CumulativeData cumulativeData = new CumulativeData();	
-		HashMap<String, PositionSpecificData> positionCacheMap = new HashMap<String, PositionSpecificData>();
+		CompanyCumulativeData cumulativeData = new CompanyCumulativeData();	
 		HashMap<String, CompanySpecificData>  companyCacheMap = new HashMap<String, CompanySpecificData>();
 		logger.debug("Attempting to fetch all applications from university id: " + univId + " from: " + startTime.toInstant() + " to: " + endTime.toInstant());
 		
@@ -39,20 +39,13 @@ public class AggregationService {
 
 		for(JobApplication currentApplication : jobApplications) {
 			String uniqueIdentifier = currentApplication.getCompany() + "," + currentApplication.getPosition();
-			if(!positionCacheMap.containsKey(uniqueIdentifier)) {
-				PositionSpecificData newPosition =  new PositionSpecificData();
-				newPosition.setCompany(currentApplication.getCompany());
-				newPosition.setPosition(currentApplication.getPosition());
-				
-				positionCacheMap.put(uniqueIdentifier, newPosition);
-			}
+			
 			if(!companyCacheMap.containsKey(currentApplication.getCompany())) {
 				CompanySpecificData newCompany = new CompanySpecificData();
 				newCompany.setCompany(currentApplication.getCompany());
 				
 				companyCacheMap.put(currentApplication.getCompany(), newCompany);
 			}
-			PositionSpecificData existingDataAboutPosition = positionCacheMap.get(uniqueIdentifier);
 			CompanySpecificData existingDataAboutCompany = companyCacheMap.get(currentApplication.getCompany());
 			
 			JobStatusEnum status = JobStatusEnum.valueOf(currentApplication.getStatus());
@@ -62,35 +55,80 @@ public class AggregationService {
 			
 			if(appliedDate != null && startTime.compareTo(appliedDate) <= 0 && endTime.compareTo(appliedDate) >= 0)
 			{
-				existingDataAboutPosition.addToAppliedCount();
 				existingDataAboutCompany.addToAppliedCount();
 			}
 			if(assessmentDate != null && startTime.compareTo(assessmentDate) <= 0 && endTime.compareTo(assessmentDate) >= 0)
 			{
-				existingDataAboutPosition.addToAssessmentCount();
 				existingDataAboutCompany.addToAssessmentCount();
 			}
 			if(interviewDate != null && startTime.compareTo(interviewDate) <= 0 && endTime.compareTo(interviewDate) >= 0)
 			{
-				existingDataAboutPosition.addToInterviewCount();
 				existingDataAboutCompany.addToInterviewCount();
 			}
 			
 			// last state so check based on status
 			if(status.equals(JobStatusEnum.SELECTED)) {
-				existingDataAboutPosition.addToSelectedCount();
 				existingDataAboutCompany.addToSelectedCount();
 			}
 			else if(status.equals(JobStatusEnum.REJECTED)) {
-				existingDataAboutPosition.addToRejectCount();
 				existingDataAboutCompany.addToRejectCount();
 			}
 			
 		}
 		logger.info("The cumulative data prepared successfully");
-		cumulativeData.setPositionSpecificData(new ArrayList<PositionSpecificData>(positionCacheMap.values()));
 		cumulativeData.setCompanySpecificData(new ArrayList<CompanySpecificData>(companyCacheMap.values()));
 		
 		return cumulativeData;
+	}
+	
+	public PositionCumulativeData computePositionCumulativeDataByCompany(String univId, String company, Date startDate, Date endDate) {
+		
+		HashMap<String, PositionSpecificData> positionCacheMap = new HashMap<String, PositionSpecificData>();
+		PositionCumulativeData positionCumulativeData = new PositionCumulativeData();
+		
+		ArrayList<JobApplication> jobApplications = jobApplicationMapper.fetchAllApplicationByUnivByCompanyInDateRange(univId, company, startDate, endDate);
+		for(JobApplication currentApplication : jobApplications) {
+			String uniqueIdentifier = currentApplication.getCompany() + "," + currentApplication.getPosition();
+			if(!positionCacheMap.containsKey(uniqueIdentifier)) {
+				PositionSpecificData newPosition =  new PositionSpecificData();
+				newPosition.setCompany(currentApplication.getCompany());
+				newPosition.setPosition(currentApplication.getPosition());
+				
+				positionCacheMap.put(uniqueIdentifier, newPosition);
+			}
+			
+			PositionSpecificData existingDataAboutPosition = positionCacheMap.get(uniqueIdentifier);
+			
+			JobStatusEnum status = JobStatusEnum.valueOf(currentApplication.getStatus());
+			Date appliedDate = currentApplication.getAppliedTime();
+			Date assessmentDate = currentApplication.getAssessmentTime();
+			Date interviewDate = currentApplication.getInterviewTime();
+			
+			if(appliedDate != null && startDate.compareTo(appliedDate) <= 0 && endDate.compareTo(appliedDate) >= 0)
+			{
+				existingDataAboutPosition.addToAppliedCount();
+			}
+			if(assessmentDate != null && startDate.compareTo(assessmentDate) <= 0 && endDate.compareTo(assessmentDate) >= 0)
+			{
+				existingDataAboutPosition.addToAssessmentCount();
+			}
+			if(interviewDate != null && startDate.compareTo(interviewDate) <= 0 && endDate.compareTo(interviewDate) >= 0)
+			{
+				existingDataAboutPosition.addToInterviewCount();
+			}
+			
+			// last state so check based on status
+			if(status.equals(JobStatusEnum.SELECTED)) {
+				existingDataAboutPosition.addToSelectedCount();
+			}
+			else if(status.equals(JobStatusEnum.REJECTED)) {
+				existingDataAboutPosition.addToRejectCount();
+			}
+			
+		}
+		positionCumulativeData.setPositionSpecificData(new ArrayList<PositionSpecificData>(positionCacheMap.values()));
+
+		return positionCumulativeData;
+		
 	}
 }

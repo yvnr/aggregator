@@ -3,24 +3,21 @@ package com.jobboard.aggregator.model;
 import java.util.ArrayList;
 
 
-public class CumulativeData {
+public class CompanyCumulativeData {
 
 	private ArrayList<CompanySpecificData> companySpecificData;
-	private ArrayList<PositionSpecificData> positionSpecificData;
 
 	
-	public CumulativeData() {
-		positionSpecificData = new ArrayList<PositionSpecificData>();
+	public CompanyCumulativeData() {
 		companySpecificData = new ArrayList<CompanySpecificData>();
 	}
 	
 	
 
-	public CumulativeData(ArrayList<CompanySpecificData> companySpecificData,
+	public CompanyCumulativeData(ArrayList<CompanySpecificData> companySpecificData,
 			ArrayList<PositionSpecificData> positionSpecificData) {
 		super();
 		this.companySpecificData = companySpecificData;
-		this.positionSpecificData = positionSpecificData;
 	}
 
 
@@ -32,15 +29,5 @@ public class CumulativeData {
 	public void setCompanySpecificData(ArrayList<CompanySpecificData> companySpecificData) {
 		this.companySpecificData = companySpecificData;
 	}
-
-	public ArrayList<PositionSpecificData> getPositionSpecificData() {
-		return positionSpecificData;
-	}
-
-	public void setPositionSpecificData(ArrayList<PositionSpecificData> positionSpecificData) {
-		this.positionSpecificData = positionSpecificData;
-	}
-	
-	
 	
 }

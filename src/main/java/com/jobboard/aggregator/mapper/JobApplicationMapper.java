@@ -31,7 +31,17 @@ public interface JobApplicationMapper {
 	})
 	public ArrayList<JobApplication> fetchAllApplicationByUnivInDateRange(String univId, Date startTime, Date endTime);
 	
-	
+	@Select("select * from job_applications_table where univ_id = #{univId} and company = #{company} and applied_time >= #{startDate} and applied_time <= #{endDate}")
+	@Results({
+		@Result(property = "userId", column = "user_id"), 
+		@Result(property = "univId", column = "univ_id"), 
+		@Result(property = "jobId", column = "job_id"),
+		@Result(property = "appliedTime", column = "applied_time"),
+		@Result(property = "assessmentTime", column = "assessment_time"),
+		@Result(property = "interviewTime", column = "interview_time"),
+		@Result(property = "responseTime", column = "response_time")
+	})
+	public ArrayList<JobApplication> fetchAllApplicationByUnivByCompanyInDateRange(String univId, String company, Date startDate, Date endDate);
 	
 	
 	@Insert("insert into job_applications_table (user_id, univ_id, company, position, status, job_id, location, applied_time, assessment_time, interview_time, response_time) values (#{userId}, #{univId}, #{company}, #{position}, #{status}, #{jobId}, #{location}, #{appliedTime}, #{assessmentTime}, #{interviewTime}, #{responseTime})")

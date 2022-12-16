@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jobboard.aggregator.model.CumulativeData;
+import com.jobboard.aggregator.model.CompanyCumulativeData;
+import com.jobboard.aggregator.model.PositionCumulativeData;
 import com.jobboard.aggregator.service.AggregationService;
 
 
@@ -31,8 +32,8 @@ public class AggregationController {
 	
 	private final Logger logger = LogManager.getLogger(AggregationController.class);
 	
-	@GetMapping("/analytics")
-	public ResponseEntity getAggregatedData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
+	@GetMapping("/analytics/company")
+	public ResponseEntity getCompanyAggregatedData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
 			@RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) Date endDate,
 			@RequestHeader("x-uid") String userId,
 			@RequestHeader("x-univ-id") String univId) {
@@ -40,7 +41,7 @@ public class AggregationController {
 		try {
 
 			logger.info("Recieved request to fetch cumulative data from: " + startDate.toInstant() + " to: " + endDate.toInstant());
-			CumulativeData cumulativeData = aggregationService.computeCumulativeData(univId, startDate, endDate);
+			CompanyCumulativeData cumulativeData = aggregationService.computeCompanyCumulativeData(univId, startDate, endDate);
 			logger.debug("Responding to request to fetch cumulative data from: " + startDate.toInstant() + " to: " + endDate.toInstant() + " with: " + cumulativeData.toString() );
 			return new ResponseEntity(cumulativeData, HttpStatus.OK);
 			
@@ -52,6 +53,30 @@ public class AggregationController {
 			
 			return new ResponseEntity(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/analytics/position")
+	public ResponseEntity getPositionAggregateData(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) Date startDate,
+			@RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) Date endDate,
+			@RequestParam(name = "company") String company,
+			@RequestHeader("x-uid") String userId,
+			@RequestHeader("x-univ-id") String univId) {
+		
+		try {
+			
+			PositionCumulativeData positionCumulativeData = aggregationService.computePositionCumulativeDataByCompany(univId, company, startDate, endDate);
+			logger.info("returning: " + positionCumulativeData);	
+			return new ResponseEntity(positionCumulativeData, HttpStatus.OK);
+			
+		}catch (Exception ex) {
+			logger.error("Error occured while fetching cumulative from: " + startDate.toInstant() + " to: " + endDate.toInstant() + " The error is: " + ex.getMessage());
+			HashMap<String, Object> errorMap = new HashMap();
+			errorMap.put("errorMessage", ex.getMessage());
+			errorMap.put("timeStamp", LocalDateTime.now());
+			
+			return new ResponseEntity(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+				
 	}
 	
 }
