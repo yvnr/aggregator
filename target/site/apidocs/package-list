@@ -1,0 +1,6 @@
+com.jobboard.aggregator
+com.jobboard.aggregator.controller
+com.jobboard.aggregator.enums
+com.jobboard.aggregator.mapper
+com.jobboard.aggregator.model
+com.jobboard.aggregator.service
