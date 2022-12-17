@@ -22,16 +22,17 @@ The Microservice runs on 8080 port and hence make sure that no other application
 * You can Also see the Coverage Report by Right Clicking on the aggregator/src/test/java package and Coverage As -> JUnit test. This should * show detailed analysis of lines and branches covered
 
 
-**DataBase**  The Microservice requires connection to PostgreSQL Database. We have fixed the credential of the database to be : username: postgres and password: lokesh123. In case you need to change these credentials, change the following properties in aggregator/src/main/resources/application.properties file:
+**DataBase**  
+The Microservice requires connection to PostgreSQL Database. We have fixed the credential of the database to be : username: postgres and password: lokesh123. In case you need to change these credentials, change the following properties in aggregator/src/main/resources/application.properties file:
 
 *The Current values are:*
-spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-spring.datasource.username=postgres
-spring.datasource.password=lokesh123 
+* spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+* spring.datasource.username=postgres
+* spring.datasource.password=lokesh123 
 
 *The values shoudl be in the below format if you want to update the credentials:*
-spring.datasource.url=jdbc:postgresql://localhost:5432/<database_name>
-spring.datasource.username=<username>
-spring.datasource.password=<password> 
+* spring.datasource.url=jdbc:postgresql://localhost:5432/<database_name>
+* spring.datasource.username=<username>
+* spring.datasource.password=<password> 
 
 **Please make sure that both Tracker and Aggregator Services are connected to same Database**
